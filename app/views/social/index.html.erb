@@ -1,2 +1,17 @@
-<h1>Social#index</h1>
-<p>Find me in app/views/social/index.html.erb</p>
+<div id="feed">
+  <% @feed.each do |entry| %>
+    <div class="well entry">
+      <div class="body">
+        <%= entry[:body] %>
+      </div>
+      <div class="entry-footer">
+        <span class="time">
+          <%= entry[:created_at] %>,
+        </span>
+        <span class="author">
+          <%= link_to "@#{entry[:user]}", "https://twitter.com/#{entry[:user]}" %>
+        </span>
+      </div>
+    </div>
+  <% end %>
+</div>
