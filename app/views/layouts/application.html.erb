@@ -17,6 +17,13 @@
             <span class="icon-bar"></span>
           </a>
           <div class="nav-collapse">
+            <% if user_signed_in? and current_user.authentications.any? %>
+              <ul class="nav">
+                <li class="divider-vertical"></li>
+                <li><%= link_to "Feed", feed_path %></li>
+                <li class="divider-vertical"></li>
+              </ul>
+            <% end %>
             <ul class="nav pull-right">
               <li class="divider-vertical"></li>
               <% if user_signed_in? %>
