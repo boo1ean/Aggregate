@@ -1,0 +1,12 @@
+<table class="table">
+  <tr>
+    <th>Provider</th>
+    <th>uid</th>
+  </tr>
+  <% @auth.each do |a| %>
+    <tr>
+      <td><%= a.provider %></td>
+      <td><%= a.uid %></td>
+    </tr>
+  <% end %>
+</table>
