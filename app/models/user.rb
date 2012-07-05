@@ -1,13 +1,14 @@
 class User < ActiveRecord::Base
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-
   attr_accessible :email, :password, :password_confirmation, :remember_me
+  devise   :database_authenticatable, :registerable,
+           :recoverable, :rememberable, :trackable, :validatable
 
   has_many :authentications
+  has_many :providers, :through => :authentications
 
   def add_auth(omniauth)
-    params = { :uid => omniauth.uid, :provider => omniauth.provider }
+    provider_id = Provider.find_by_name(omniauth.provider)
+    params      = { :uid => omniauth.uid, :provider => provider_id }
 
     if omniauth.credentials
       params[:token]  = omniauth.credentials.token
@@ -20,7 +21,7 @@ class User < ActiveRecord::Base
   def feed
     result = []
     authentications.each do |auth|
-      case auth.provider
+      case auth.provider.name
       when 'twitter'
         result |= twitter_feed auth.token, auth.secret
       else

@@ -11,21 +11,27 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120704115529) do
+ActiveRecord::Schema.define(:version => 20120705063554) do
 
   create_table "authentications", :force => true do |t|
     t.integer  "user_id"
-    t.string   "provider"
     t.string   "uid"
     t.string   "token"
     t.string   "secret"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "provider_id"
   end
 
   add_index "authentications", ["uid"], :name => "index_authentications_on_uid"
-  add_index "authentications", ["user_id", "provider"], :name => "index_authentications_on_user_id_and_provider", :unique => true
   add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id"
+  add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id_and_provider", :unique => true
+
+  create_table "providers", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

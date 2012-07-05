@@ -5,7 +5,7 @@
   </tr>
   <% @auth.each do |a| %>
     <tr>
-      <td><%= a.provider %></td>
+      <td><%= a.provider.name %></td>
       <td><%= a.uid %></td>
     </tr>
   <% end %>
