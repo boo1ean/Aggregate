@@ -10,6 +10,7 @@ gem 'koala'
 # Auth
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
+gem 'omniauth-vkontakte'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

@@ -12,6 +12,7 @@ class CreateProviders < ActiveRecord::Migration
     # Create default set of providers
     Provider.create(:name => "twitter")
     Provider.create(:name => "facebook")
+    Provider.create(:name => "vkontakte")
   end
 
   def down
