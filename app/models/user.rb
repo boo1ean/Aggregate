@@ -62,10 +62,10 @@ class User < ActiveRecord::Base
   def parse_twitter_feed(feed)
     feed.collect do |item|
       {
-        :created_at => item.created_at,
-        :body       => item.text,
-        :user       => item.user.screen_name,
-        :provider   => :twitter
+        :created_at  => item.created_at,
+        :body        => item.text,
+        :screen_name => item.user.screen_name,
+        :provider    => :twitter
       }
     end
   end
@@ -82,7 +82,8 @@ class User < ActiveRecord::Base
       {
         :created_at => Time.parse(item["created_time"]),
         :body       => item["story"],
-        :user       => item["from"]["name"],
+        :user_name  => item["from"]["name"],
+        :user_id    => item["from"]["id"],
         :provider   => :facebook
       }
     end
