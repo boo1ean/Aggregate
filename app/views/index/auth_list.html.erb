@@ -1,12 +1,18 @@
 <table class="table">
-  <tr>
-    <th>Provider</th>
-    <th>uid</th>
-  </tr>
+  <thead>
+    <tr>
+      <th>Provider</th>
+      <th>UID</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
   <% @auth.each do |a| %>
     <tr>
       <td><%= a.provider.name %></td>
       <td><%= a.uid %></td>
+      <td><%= link_to "Delete", destroy_auth_path(a.id), :data => { :confirm => "Are you sure?" }, :method => :delete, :class => "btn btn-danger" %></td>
     </tr>
   <% end %>
+  </tbody>
 </table>
