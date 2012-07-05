@@ -1,9 +1,13 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.6'
-gem 'twitter'
 gem 'devise'
 
+# API drivers
+gem 'twitter'
+gem 'koala'
+
+# Auth
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 

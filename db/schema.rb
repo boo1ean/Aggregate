@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(:version => 20120705063554) do
 
   add_index "authentications", ["uid"], :name => "index_authentications_on_uid"
   add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id"
-  add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id_and_provider", :unique => true
 
   create_table "providers", :force => true do |t|
     t.string   "name"

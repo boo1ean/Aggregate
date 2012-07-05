@@ -16,5 +16,8 @@ FACEBOOK_APP_SECRET = Aggregate::Application.config.API["FACEBOOK_APP_SECRET"]
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :twitter,  TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
-  provider :facebook, FACEBOOK_APP_ID,      FACEBOOK_APP_SECRET, { :client_options => { :ssl => { :ca_path => "/etc/ssl/certs" } } }
+  provider :facebook, FACEBOOK_APP_ID,      FACEBOOK_APP_SECRET, {
+    :client_options => { :ssl => { :ca_path => "/etc/ssl/certs" } },
+    :scope          => "read_stream"
+  }
 end

@@ -30,24 +30,25 @@ class User < ActiveRecord::Base
 
   # Get full feed
   def feed
-    result = []
+    @feed = []
+
     authentications.each do |auth|
       case auth.provider.name
-      when 'twitter'
-        result |= twitter_feed auth.token, auth.secret
+      when "twitter"  
+        twitter_feed auth.token, auth.secret
+      when "facebook" 
+        facebook_feed auth.token
       else
-        # Default
       end
     end
 
-    result
+    @feed.sort { |a,b| b[:created_at] <=> a[:created_at] }
   end
 
   private
+
   # Get data from twitter
   def twitter_feed(token, secret)
-    result = []
-
     Twitter.configure do |config|
       config.consumer_key       = Aggregate::Application.config.API["TWITTER_CONSUMER_KEY"]
       config.consumer_secret    = Aggregate::Application.config.API["TWITTER_CONSUMER_SECRET"]
@@ -55,10 +56,36 @@ class User < ActiveRecord::Base
       config.oauth_token_secret = secret
     end
 
-    timeline = Twitter.home_timeline.each do |item|
-      result << { :created_at => item.created_at, :body => item.text, :user => item.user.screen_name }
-    end
-
-    result
+    @feed += parse_twitter_feed Twitter.home_timeline
   end
+
+  def parse_twitter_feed(feed)
+    feed.collect do |item|
+      {
+        :created_at => item.created_at,
+        :body       => item.text,
+        :user       => item.user.screen_name,
+        :provider   => :twitter
+      }
+    end
+  end
+
+  # Get data from facebook
+  def facebook_feed(token)
+    @graph = Koala::Facebook::API.new(token)
+
+    @feed += parse_facebook_feed @graph.get_connections("me", "home", :limit => 5)
+  end
+
+  def parse_facebook_feed(feed)
+    feed.collect do |item|
+      {
+        :created_at => Time.parse(item["created_time"]),
+        :body       => item["story"],
+        :user       => item["from"]["name"],
+        :provider   => :facebook
+      }
+    end
+  end
+
 end
