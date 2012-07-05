@@ -1,0 +1,13 @@
+<div class="well entry facebook-entry">
+  <div class="body">
+    <%= entry[:body] %>
+  </div>
+  <div class="entry-footer">
+    <span class="time">
+      <%= entry[:created_at] %>,
+    </span>
+    <span class="author">
+      <%= link_to "@#{entry[:user]}", "https://twitter.com/#{entry[:user]}" %>
+    </span>
+  </div>
+</div>

@@ -6,3 +6,20 @@
 .entry-footer {
   margin-top: 6px;
 }
+
+.entry {
+  background-position: right center;
+  background-repeat: no-repeat;
+
+  &.facebook-entry {
+    background-image: url(facebook_64.png);
+  }
+
+  &.twitter-entry {
+    background-image: url(twitter_64.png);
+  }
+
+  .body {
+    max-width: 700px;
+  }
+}
