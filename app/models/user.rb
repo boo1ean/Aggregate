@@ -11,8 +11,9 @@ class User < ActiveRecord::Base
     params      = { :uid => omniauth.uid, :provider => provider_id }
 
     if omniauth.credentials
-      params[:token]  = omniauth.credentials.token
-      params[:secret] = omniauth.credentials.secret
+      params[:token]      = omniauth.credentials.token
+      params[:secret]     = omniauth.credentials.secret
+      params[:expires_at] = omniauth.credentials.expires_at
     end
 
     auth = authentications.create(params)

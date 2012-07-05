@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20120705063554) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.integer  "provider_id"
+    t.string   "expires_at"
   end
 
   add_index "authentications", ["uid"], :name => "index_authentications_on_uid"
