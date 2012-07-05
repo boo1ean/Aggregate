@@ -18,6 +18,16 @@ class User < ActiveRecord::Base
     auth = authentications.create(params)
   end
 
+  # Get missing providers
+  def missing_providers
+    all_auth     = Provider.all.collect  { |a| a.name }
+    current_auth = providers.collect     { |a| a.name }
+
+    # Just return difference between all an current
+    all_auth - current_auth
+  end
+
+  # Get full feed
   def feed
     result = []
     authentications.each do |auth|

@@ -8,11 +8,14 @@
           <span class="icon-bar"></span>
         </a>
         <div class="nav-collapse">
-          <% if user_signed_in? and current_user.authentications.any? %>
+          <% if user_signed_in? %>
             <ul class="nav">
               <li class="divider-vertical"></li>
-              <li><%= link_to "Feed", feed_path %></li>
-              <li class="divider-vertical"></li>
+              <% if current_user.authentications.any? %>
+                <li><%= link_to "Feed", feed_path %></li>
+                <li class="divider-vertical"></li>
+              <% end %>
+              <%= render "layouts/components/missing_providers" %>
             </ul>
           <% end %>
           <ul class="nav pull-right">

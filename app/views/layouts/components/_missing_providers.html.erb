@@ -1,0 +1,4 @@
+<% current_user.missing_providers.each do |provider_name| %>
+  <li><%= link_to "+#{provider_name.capitalize}", "/auth/#{provider_name}" %></li>
+  <li class="divider-vertical"></li>
+<% end %>
