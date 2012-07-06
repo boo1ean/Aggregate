@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/boo1ean/vkontakte_api.git
+  revision: a9977f3c066f1ff014be1d75939c8261ed0b83fc
+  specs:
+    vkontakte_api (0.2.1)
+      activesupport (~> 3.0)
+      faraday (~> 0.7)
+      i18n (~> 0.6)
+      multi_json (~> 1.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -186,7 +196,7 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
-    twitter (3.0.3)
+    twitter (3.0.4)
       faraday (~> 0.8)
       multi_json (~> 1.3)
       simple_oauth (~> 0.1.6)
@@ -222,3 +232,4 @@ DEPENDENCIES
   sqlite3
   twitter
   uglifier (>= 1.0.3)
+  vkontakte_api!

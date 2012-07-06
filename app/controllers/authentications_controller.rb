@@ -4,7 +4,7 @@ class AuthenticationsController < ApplicationController
   def create
     omniauth = request.env["omniauth.auth"]
     current_user.add_auth omniauth
-    redirect_to :root
+    redirect_to feed_path
   end
 
   # Delete auth
