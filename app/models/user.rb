@@ -1,3 +1,5 @@
+require "feed_factory"
+
 class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me
   devise   :database_authenticatable, :registerable,
@@ -6,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :authentications
   has_many :providers, :through => :authentications
 
+  # Add new auth for current user
   def add_auth(omniauth)
     provider_id = Provider.find_by_name(omniauth.provider)
     params      = { :uid => omniauth.uid, :provider => provider_id }
@@ -33,80 +36,11 @@ class User < ActiveRecord::Base
     @feed = []
 
     authentications.each do |auth|
-      case auth.provider.name
-      when "twitter"  
-        twitter_feed auth.token, auth.secret
-      when "facebook" 
-        facebook_feed auth.token
-      when "vkontakte"
-        vkontakte_feed auth.token
-      else
-      end
+      @feed += FeedFactory.create(auth.provider.name, auth.token, auth.secret).feed
     end
 
     # Desc sort by created_at
     @feed.sort { |a,b| b[:created_at] <=> a[:created_at] }
-  end
-
-  private
-
-  # Get data from twitter
-  def twitter_feed(token, secret)
-    Twitter.configure do |config|
-      config.consumer_key       = Aggregate::Application.config.API["TWITTER_CONSUMER_KEY"]
-      config.consumer_secret    = Aggregate::Application.config.API["TWITTER_CONSUMER_SECRET"]
-      config.oauth_token        = token
-      config.oauth_token_secret = secret
-    end
-
-    @feed += parse_twitter_feed Twitter.home_timeline(:count => 5)
-  end
-
-  def parse_twitter_feed(feed)
-    feed.collect do |item|
-      {
-        :created_at  => item.created_at,
-        :body        => item.text,
-        :screen_name => item.user.screen_name,
-        :provider    => :twitter
-      }
-    end
-  end
-
-  # Get data from facebook
-  def facebook_feed(token)
-    @graph = Koala::Facebook::API.new(token)
-
-    @feed += parse_facebook_feed @graph.get_connections("me", "home", :limit => 10)
-  end
-
-  def parse_facebook_feed(feed)
-    feed.collect do |item|
-      {
-        :created_at => Time.parse(item["created_time"]),
-        :body       => item["story"],
-        :user_name  => item["from"]["name"],
-        :user_id    => item["from"]["id"],
-        :provider   => :facebook
-      }
-    end
-  end
-
-  # Ged data from vkontakte
-  def vkontakte_feed(token)
-    vk = VkontakteApi::Client.new(token)
-    @feed += parse_vkontakte_feed vk.newsfeed.get(:count => 5)
-  end
-
-  def parse_vkontakte_feed(feed)
-    feed[:items].collect do |item|
-      {
-        :created_at => Time.at(item[:date]),
-        :body       => item[:text],
-        :type       => item[:type],
-        :provider   => :vkontakte
-      }
-    end
   end
 
 end

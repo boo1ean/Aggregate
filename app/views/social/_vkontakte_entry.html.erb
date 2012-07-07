@@ -2,6 +2,9 @@
   <div class="body">
     <%= raw entry[:body] %>
   </div>
+  <% entry[:attachments].each do |a| %>
+    <%= image_tag a[:src] if "photo" == a[:type] %>
+  <% end if entry[:attachments] %>
   <div class="entry-footer">
     <span class="time">
       <%= entry[:created_at] %>
