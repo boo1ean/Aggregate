@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe IndexController do
 
-  describe "GET 'index'" do
-    it "returns http success" do
-      get 'index'
-      response.should be_success
+  context "when not logged in" do
+
+    describe "#index" do
+      #it { should respond_with 200 }
     end
+
   end
 
 end
