@@ -21,9 +21,9 @@ module FeedFactory
   # Base feed's class implements method for feed fetching
   class Feed
     # Return specified number of feed entries
-    def feed(count = 5)
-      data = get_data(count)
-      parse_data data
+    def feed(count = 7)
+      @data = get_data(count)
+      parse_data @data
     end
   end
 
@@ -87,7 +87,13 @@ module FeedFactory
 
   class VkontakteFeed < Feed
     PROVIDER = :vkontakte
-    PHOTO    = "photo"
+    POST     = "post"
+
+    # Attachment types
+    PHOTO = "photo"
+    LINK  = "link"
+    AUDIO = "audio"
+    VIDEO = "video"
 
     # Set up api driver
     def initialize(token, secret = nil)
@@ -109,10 +115,11 @@ module FeedFactory
         }
 
         case item[:type]
-        when "post"
+        when POST
           entry[:body] = item[:text]
         end
 
+        entry[:user]        = get_entry_user_name item
         entry[:attachments] = parse_attachments item if item[:attachments]
 
         entry
@@ -124,8 +131,37 @@ module FeedFactory
         case a[:type]
         when PHOTO 
           { :type => :photo, :src => a[:photo][:src_big] }
+        when LINK
+          { :type => :link, :url => a[:link][:url], :title => a[:link][:title] }
+        when AUDIO
+          { :type => :audio }
+        when VIDEO
+          { :type => :video }
         end
       end
+    end
+
+    def get_entry_user_name(entry)
+      source_id = entry[:source_id].abs
+
+      # Try to get user
+      index = @data[:profiles].index { |p| source_id == p[:uid] }
+
+      user = {}
+      if index
+        user_data   = @data[:profiles][index]
+        user[:name] = "#{user_data[:last_name]} #{user_data[:first_name]}"
+      else
+        # If can't find user, try to find group
+        index       = @data[:groups].index { |g| source_id == g[:gid] }
+        user_data   = @data[:groups][index]
+        user[:name] = user_data[:name]
+      end
+
+      user[:link]  = "http://vk.com/#{user_data[:screen_name]}"
+      user[:photo] = user_data[:photo]
+
+      user
     end
   end
 end

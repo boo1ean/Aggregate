@@ -1,13 +1,13 @@
 <div class="well entry twitter-entry">
   <div class="body">
+    <div class="author">
+      <%= link_to "@#{entry[:screen_name]}", "https://twitter.com/#{entry[:screen_name]}" %>
+    </div>
     <%= entry[:body] %>
   </div>
   <div class="entry-footer">
     <span class="time">
-      <%= entry[:created_at] %>,
-    </span>
-    <span class="author">
-      <%= link_to "@#{entry[:screen_name]}", "https://twitter.com/#{entry[:screen_name]}" %>
+      <%= entry[:created_at] %>
     </span>
   </div>
 </div>

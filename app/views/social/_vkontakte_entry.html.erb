@@ -1,15 +1,23 @@
 <div class="well entry vk-entry">
   <div class="body">
+    <div class="author">
+      <a href="<%= entry[:user][:link] %>"><%= entry[:user][:name] %></a>
+    </div>
     <%= raw entry[:body] %>
   </div>
   <% entry[:attachments].each do |a| %>
-    <%= image_tag a[:src] if "photo" == a[:type] %>
+    <div class="attachment">
+      <% case a[:type] %>
+      <% when :photo %>
+        <%= image_tag a[:src] %>
+      <% when :link %>
+        <%= link_to a[:title], a[:url] %>
+      <% end %>
+    </div>
   <% end if entry[:attachments] %>
   <div class="entry-footer">
     <span class="time">
       <%= entry[:created_at] %>
-    </span>
-    <span class="author">
     </span>
   </div>
 </div>
