@@ -13,6 +13,8 @@ gem 'koala'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'omniauth-vkontakte'
+gem 'pg'
+gem 'activerecord-postgresql-adapter'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
