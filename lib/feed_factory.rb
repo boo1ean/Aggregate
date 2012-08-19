@@ -61,6 +61,10 @@ module FeedFactory
   class FacebookFeed < Feed
     PROVIDER = :facebook
 
+    # Post types
+    LINK   = "link"
+    STATUS = "status"
+
     # Set up api driver
     def initialize(token, secret = nil)
       @api = Koala::Facebook::API.new(token)
@@ -74,13 +78,24 @@ module FeedFactory
 
     def parse_data(data)
       data.collect do |item|
-        {
+        entry = {
           :provider   => PROVIDER,
           :created_at => Time.parse(item["created_time"]),
           :body       => item["story"],
           :user_name  => item["from"]["name"],
-          :user_id    => item["from"]["id"]
+          :user_id    => item["from"]["id"],
+          :type       => item["type"]
         }
+
+        case entry[:type]
+        when LINK
+          entry[:description] = item["description"]
+          entry[:name]        = item["name"]
+          entry[:link]        = item["link"]
+        when STATUS
+        end
+
+        entry
       end
     end
   end

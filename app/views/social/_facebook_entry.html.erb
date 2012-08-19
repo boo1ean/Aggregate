@@ -1,9 +1,15 @@
 <div class="well entry facebook-entry">
   <div class="body">
     <div class="author">
-      <%= link_to "@#{entry[:user_name]}", "https://facebook.com/#{entry[:user_id]}" %>
+      <%= link_to entry[:user_name], "https://facebook.com/#{entry[:user_id]}" %>
     </div>
-    <%= entry[:body] %>
+    <% case entry[:type] %>
+    <% when "link" %>
+      <%= link_to entry[:name], entry[:link] %>
+      <%= entry[:description] %>
+    <% else %>
+      <%= entry[:body] %>
+    <% end %>
   </div>
   <div class="entry-footer">
     <span class="time">
